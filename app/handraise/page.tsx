@@ -1,15 +1,16 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react'; // 加上 Suspense
 import { supabase } from '@/lib/supabase';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function HandRaisePage() {
+// --- 1. 抽離出來的子組件，負責處理舉手邏輯 ---
+function HandRaiseContent() {
   const searchParams = useSearchParams();
   const classId = searchParams.get('classId');
   
   const [userName, setUserName] = useState<string>('');
   const [className, setClassName] = useState<string>('');
-  const [groupName, setGroupName] = useState<string>(''); // 我們定義的是 groupName
+  const [groupName, setGroupName] = useState<string>('');
   const [user, setUser] = useState<any>(null);
   const [isRaising, setIsRaising] = useState(false);
   const [raiseId, setRaiseId] = useState<string | null>(null);
@@ -43,7 +44,7 @@ export default function HandRaisePage() {
         .select('group_name')
         .eq('student_id', user.id)
         .eq('class_id', classId)
-        .maybeSingle(); // 使用 maybeSingle 避免找不到資料時拋出異常
+        .maybeSingle();
       
       if (enrollment) {
         setGroupName(enrollment.group_name);
@@ -129,7 +130,6 @@ export default function HandRaisePage() {
             <span className="text-[16px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
               📍 {className || '讀取中...'}
             </span>
-            {/* 修正點 1: 改為 groupName */}
             {groupName && (
               <span className="text-[16px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100">
                 👥 {groupName}
@@ -167,7 +167,6 @@ export default function HandRaisePage() {
               : `點擊按鈕加入 ${className} 的舉手隊伍`}
           </p>
           
-          {/* 修正點 2: 改為 groupName */}
           {groupName && (
             <p className="text-[12px] text-indigo-400 mb-10 font-bold">
               小組夥伴：{groupName}
@@ -198,5 +197,14 @@ export default function HandRaisePage() {
         </button>
       </div>
     </div>
+  );
+}
+
+// --- 2. 主頁面組件：使用 Suspense 包裹子組件 ---
+export default function HandRaisePage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-900 font-bold">系統載入中...</div>}>
+      <HandRaiseContent />
+    </Suspense>
   );
 }

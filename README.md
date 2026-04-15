@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Next.js + Supabase 範例專案
 
-## Getting Started
+簡介
+-
+這是一個以 Next.js（App Router）為基礎，並整合 Supabase 的範例專案，用來示範如何在前端存取 Supabase client、處理身分驗證與呼叫資料庫/API。
 
-First, run the development server:
+需求
+-
+- Node.js (建議 LTS)
+- npm / yarn / pnpm
+
+快速開始
+-
+1. 安裝相依套件：
+
+```bash
+npm install
+```
+
+2. 建立環境變數檔案 `.env.local`（放在專案根目錄），範例：
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+3. 啟動開發伺服器：
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. 在瀏覽器開啟：
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+重要檔案
+-
+- [app/page.tsx](app/page.tsx#L1) - 網站首頁
+- [app/handraise/page.tsx](app/handraise/page.tsx#L1) - 示範頁面（舉手功能）
+- [app/select-class/page.tsx](app/select-class/page.tsx#L1) - 選課範例頁面
+- [lib/supabase.ts](lib/supabase.ts#L1) - Supabase client 初始化（使用 `NEXT_PUBLIC_SUPABASE_URL` 與 `NEXT_PUBLIC_SUPABASE_ANON_KEY`）
+- [types/database.ts](types/database.ts#L1) - 資料表型別定義（若有）
 
-## Learn More
+說明
+-
+- 本專案的 Supabase client 在 [lib/supabase.ts](lib/supabase.ts#L1) 中建立，會從環境變數讀取 `NEXT_PUBLIC_SUPABASE_URL` 與 `NEXT_PUBLIC_SUPABASE_ANON_KEY`。
+- 若要修改頁面內容，請編輯 `app/` 下對應的 `page.tsx` 檔案，Next.js 將自動熱重載。
 
-To learn more about Next.js, take a look at the following resources:
+部署
+-
+部署到 Vercel 可直接使用預設設定，請在 Vercel 專案設定中加入相同的環境變數 `NEXT_PUBLIC_SUPABASE_URL` 與 `NEXT_PUBLIC_SUPABASE_ANON_KEY`。更多部署資訊請參考 Next.js 官方文件。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+其他資源
+-
+- Next.js 文件：https://nextjs.org/docs
+- Supabase 文件：https://supabase.com/docs
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
